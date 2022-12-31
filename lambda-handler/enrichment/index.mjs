@@ -1,13 +1,28 @@
-export const handler = async(event) => {
-    // TODO implement
-    console.log(JSON.stringify(event, null, 2));
-    console.log(event)
-    //console.log(event[0].dynamodb.NewImage.custom_fields["S"])
-    //console.log(JSON.parse(event[0].dynamodb.NewImage.custom_fields["S"]).global)
+export const handler = async (event) => {
+    console.log("Original event");
+    console.log(event);
+
+    const orderQty = event[0].orderQty;
+    const orderPrice = event[0].orderPrice;
+    let discountPercentage = 0;
+
+    if (orderQty >= 100) {
+        discountPercentage = "50%";
+    } else if (orderQty >= 50 && orderQty < 100) {
+        discountPercentage = "30%";
+    } else {
+        discountPercentage = "10%";
+    }
 
     const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
+        orderDate: new Date(),
+        orderQty: orderQty,
+        orderPrice: orderPrice,
+        discountPercentage: discountPercentage
     };
+
+    console.log("Enriched event");
+    console.log(response);
+
     return response;
 };

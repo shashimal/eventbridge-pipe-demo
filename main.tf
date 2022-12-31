@@ -1,6 +1,6 @@
 locals {
   filter_pattern            = " {\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 10] }] } }"
-  enrichment_input_template = "{\"orderQty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.orderPrice>\"}"
+  enrichment_input_template = "{\"item\": \"<$.body.itemName>\",\"qty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.ItemPrice>\"}"
 }
 
 resource "aws_cloudformation_stack" "eventbridge_pipe_stack" {

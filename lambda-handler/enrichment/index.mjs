@@ -2,23 +2,25 @@ export const handler = async (event) => {
     console.log("Original event");
     console.log(event);
 
-    const orderQty = event[0].orderQty;
-    const orderPrice = event[0].orderPrice;
-    let discountPercentage = 0;
+    const item = event[0].item;
+    const qty = event[0].qty;
+    const price = event[0].price;
+    let discount = 0;
 
-    if (orderQty >= 100) {
-        discountPercentage = "50%";
-    } else if (orderQty >= 50 && orderQty < 100) {
-        discountPercentage = "30%";
+    if (qty >= 100) {
+        discount = "50%";
+    } else if (qty >= 50 && qty < 100) {
+        discount = "30%";
     } else {
-        discountPercentage = "10%";
+        discount = "10%";
     }
 
     const response = {
-        orderDate: new Date(),
-        orderQty: orderQty,
-        orderPrice: orderPrice,
-        discountPercentage: discountPercentage
+        date: new Date(),
+        item,
+        qty,
+        price,
+        discount
     };
 
     console.log("Enriched event");

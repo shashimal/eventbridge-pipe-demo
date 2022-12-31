@@ -1,3 +1,3 @@
-resource "aws_sqs_queue" "article_sqs" {
-  name = "articles"
+resource "aws_sqs_queue" "customer_order_sqs" {
+  name = "customer-order"
 }

@@ -35,14 +35,14 @@ data "aws_iam_policy_document" "lambda_assume_policy_document" {
   }
 }
 
-data "archive_file" "enrichment_lambda_file" {
+data "archive_file" "order_process_lambda_file" {
   type        = "zip"
-  source_file = "${path.module}/lambda-handler/enrichment/index.mjs"
-  output_path = "${path.module}/lambda-handler/enrichment/index.zip"
+  source_file = "${path.module}/lambda-handler/order-process/index.mjs"
+  output_path = "${path.module}/lambda-handler/order-process/index.zip"
 }
 
-data "archive_file" "target_lambda_file" {
+data "archive_file" "order_invoice_file" {
   type        = "zip"
-  source_file = "${path.module}/lambda-handler/target/index.mjs"
-  output_path = "${path.module}/lambda-handler/target/index.zip"
+  source_file = "${path.module}/lambda-handler/order-invoice/index.mjs"
+  output_path = "${path.module}/lambda-handler/order-invoice/index.zip"
 }

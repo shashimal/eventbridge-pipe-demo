@@ -1,26 +1,26 @@
 
 
-module "eventbridge_pipe_target_lambda" {
+module "order_invoice_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name          = "pipe-target-lambda"
-  source_path            = "${path.module}/lambda-handler/target"
+  function_name          = "order-process"
+  source_path            = "${path.module}/lambda-handler/order-invoice"
   handler                = "index.handler"
   runtime                = "nodejs18.x"
-  local_existing_package = "${path.module}/lambda-handler/target/index.zip"
+  local_existing_package = "${path.module}/lambda-handler/order-invoice/index.zip"
   create_role            = false
   lambda_role            = aws_iam_role.lambda_role.arn
 }
 
 
-module "eventbridge_pipe_enrichment_lambda" {
+module "order_process_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name          = "pipe-enrichment-lambda"
-  source_path            = "${path.module}/lambda-handler/enrichment"
+  function_name          = "order-invoice"
+  source_path            = "${path.module}/lambda-handler/order-process"
   handler                = "index.handler"
   runtime                = "nodejs18.x"
-  local_existing_package = "${path.module}/lambda-handler/enrichment/index.zip"
+  local_existing_package = "${path.module}/lambda-handler/order-process/index.zip"
   create_role            = false
   lambda_role            = aws_iam_role.lambda_role.arn
 }

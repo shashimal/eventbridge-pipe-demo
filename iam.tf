@@ -10,7 +10,7 @@ resource "aws_iam_role_policy" "eventbridge_pipe_sqs_iam_policy" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "eventbridge-target-lambda"
+  name               = "eventbridge-pipe-lambda"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy_document.json
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"

@@ -1,11 +1,6 @@
 locals {
-  json = jsondecode(
-    {
-      "body" = {
-        "orderQty" = [{ numeric = [">", 10] }]
-      }
-    }
-  )
+  filter_pattern            = " {\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 10] }] } }"
+  enrichment_input_template = "{\"orderQty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.price>\"}"
 }
 
 resource "aws_cloudformation_stack" "eventbridge_pipe_stack" {
@@ -15,6 +10,8 @@ resource "aws_cloudformation_stack" "eventbridge_pipe_stack" {
     SourceArn     = aws_sqs_queue.article_sqs.arn
     EnrichmentArn = module.eventbridge_pipe_enrichment_lambda.lambda_function_arn
     TargetArn     = module.eventbridge_pipe_target_lambda.lambda_function_arn
+    FilterPattern = local.filter_pattern
+    InputTemplate = local.enrichment_input_template
   }
 
   template_body = jsonencode({
@@ -30,6 +27,12 @@ resource "aws_cloudformation_stack" "eventbridge_pipe_stack" {
       },
       "RoleArn" : {
         "Type" : "String"
+      },
+      "FilterPattern" : {
+        "Type" : "String"
+      },
+      "InputTemplate" : {
+        "Type" : "String"
       }
     },
     "Resources" : {
@@ -37,19 +40,22 @@ resource "aws_cloudformation_stack" "eventbridge_pipe_stack" {
         "Type" : "AWS::Pipes::Pipe",
         "Properties" : {
           "Name" : "EventBridgePipeDemo",
-          "RoleArn" : { "Ref" : "RoleArn" }
+          "RoleArn" : { "Ref" : "RoleArn" },
           "Source" : { "Ref" : "SourceArn" },
           "SourceParameters" : {
             "FilterCriteria" : {
               "Filters" : [
                 {
-                  "Pattern" : local.json
+                  "Pattern" : { "Ref" : "FilterPattern" },
                 }
               ]
             }
+          },
+          "Enrichment" : { "Ref" : "EnrichmentArn" },
+          "EnrichmentParameters" : {
+            "InputTemplate" : { "Ref" : "InputTemplate" },
           }
-          "Enrichment" : { "Ref" : "EnrichmentArn" }
-          "Target" : { "Ref" : "TargetArn" },
+          "Target" : { "Ref" : "TargetArn" }
         }
       }
     }

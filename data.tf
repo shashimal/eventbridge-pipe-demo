@@ -37,12 +37,12 @@ data "aws_iam_policy_document" "lambda_assume_policy_document" {
 
 data "archive_file" "enrichment_lambda_file" {
   type        = "zip"
-  source_file = "${path.module}/lambda-handler/enrichment/index.js"
+  source_file = "${path.module}/lambda-handler/enrichment/index.mjs"
   output_path = "${path.module}/lambda-handler/enrichment/index.zip"
 }
 
 data "archive_file" "target_lambda_file" {
   type        = "zip"
-  source_file = "${path.module}/lambda-handler/target/index.js"
+  source_file = "${path.module}/lambda-handler/target/index.mjs"
   output_path = "${path.module}/lambda-handler/target/index.zip"
 }

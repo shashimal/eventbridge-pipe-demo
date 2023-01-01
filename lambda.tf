@@ -3,7 +3,7 @@
 module "order_invoice_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name          = "order-process"
+  function_name          = "order-invoice"
   source_path            = "${path.module}/lambda-handler/order-invoice"
   handler                = "index.handler"
   runtime                = "nodejs18.x"
@@ -16,7 +16,7 @@ module "order_invoice_lambda" {
 module "order_process_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name          = "order-invoice"
+  function_name          = "order-process"
   source_path            = "${path.module}/lambda-handler/order-process"
   handler                = "index.handler"
   runtime                = "nodejs18.x"

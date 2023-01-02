@@ -16,3 +16,13 @@ resource "aws_iam_role" "lambda_role" {
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   ]
 }
+
+resource "aws_iam_role" "pipe_dynamodb_role" {
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_pipe_policy_document.json
+}
+
+resource "aws_iam_role_policy" "pipe_dynamodb_iam_role_policy" {
+  name = "eventbridge-pipe-dynamodb"
+  role   = aws_iam_role.pipe_dynamodb_role.id
+  policy = data.aws_iam_policy_document.eventbridge_pipe_dynamodb_policy.json
+}

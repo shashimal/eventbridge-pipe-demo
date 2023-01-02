@@ -25,6 +25,25 @@ data "aws_iam_policy_document" "eventbridge_pipe_sqs_policy" {
   }
 }
 
+data "aws_iam_policy_document" "eventbridge_pipe_dynamodb_policy" {
+  statement {
+    sid = "InvokeLambda"
+    actions = ["lambda:InvokeFunction"]
+    resources = ["*"]
+  }
+  statement {
+    sid = "AccessDynamoDB"
+    actions = [
+      "dynamodb:DescribeStream",
+      "dynamodb:GetRecords",
+      "dynamodb:GetShardIterator",
+      "dynamodb:ListStreams"
+    ]
+    resources = ["*"]
+  }
+}
+
+
 data "aws_iam_policy_document" "lambda_assume_policy_document" {
   statement {
     actions = ["sts:AssumeRole"]

@@ -11,6 +11,7 @@ variable "pipe_source_arn" {
 variable "pipe_enrichment_arn" {
   description = "Enrichment arn (Lambda, API Gateway etc)"
   type = string
+  default = ""
 }
 
 variable "pipe_target_arn" {

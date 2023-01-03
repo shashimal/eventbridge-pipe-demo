@@ -6,7 +6,7 @@ locals {
     }
   ]
 
-  dynamodb_enrichment_input_template = "{ \"custom_fields\":  \"<$.dynamodb.NewImage.custom_fields.S>\" , \"custom_fields_old\":  \"<$.dynamodb.OldImage.custom_fields.S>\"}"
+  dynamodb_enrichment_input_template = "{ \"custom_fields_new\":  \"<$.dynamodb.NewImage.custom_fields.S>\" , \"custom_fields_old\":  \"<$.dynamodb.OldImage.custom_fields.S>\"}"
 }
 
 module "pipe_sqs" {

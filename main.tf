@@ -1,13 +1,12 @@
 locals {
-  enrichment_input_template = "{\"item\": \"<$.body.itemName>\",\"qty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.ItemPrice>\"}"
+  sqs_enrichment_input_template = "{\"item\": \"<$.body.itemName>\",\"qty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.ItemPrice>\"}"
   filters = [
     {
       Pattern: "{\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 10] }] } }"
     }
   ]
 
-  #<$.dynamodb\": { \"NewImage\": { \"custom_fields\": { \"S\"} }>
-  dynamodb_enrichment_input_template = "{ \"custom_fields\":  \"<$.dynamodb.NewImage.custom_fields.S.global>\" , \"custom_fields_old\":  \"<$.dynamodb.OldImage.custom_fields.S.global>\"}"
+  dynamodb_enrichment_input_template = "{ \"custom_fields\":  \"<$.dynamodb.NewImage.custom_fields.S>\" , \"custom_fields_old\":  \"<$.dynamodb.OldImage.custom_fields.S>\"}"
 }
 
 module "pipe_sqs" {
@@ -17,7 +16,7 @@ module "pipe_sqs" {
   pipe_source_arn = aws_sqs_queue.customer_order_sqs.arn
   pipe_enrichment_arn = module.order_process_lambda.lambda_function_arn
   pipe_target_arn = module.order_invoice_lambda.lambda_function_arn
-  input_transform_template = local.enrichment_input_template
+  input_transform_template = local.sqs_enrichment_input_template
   source_filters = local.filters
 }
 
@@ -29,6 +28,5 @@ module "pipe_dynamodb" {
   pipe_enrichment_arn = module.order_process_lambda.lambda_function_arn
   pipe_target_arn = module.order_invoice_lambda.lambda_function_arn
   input_transform_template = local.dynamodb_enrichment_input_template
-  #source_filters = local.filters
 }
 

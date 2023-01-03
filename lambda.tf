@@ -24,3 +24,15 @@ module "order_process_lambda" {
   create_role            = false
   lambda_role            = aws_iam_role.lambda_role.arn
 }
+
+module "aft_process_lambda" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name          = "aft-process"
+  source_path            = "${path.module}/lambda-handler/aft-process"
+  handler                = "index.handler"
+  runtime                = "nodejs18.x"
+  local_existing_package = "${path.module}/lambda-handler/aft-process/index.zip"
+  create_role            = false
+  lambda_role            = aws_iam_role.lambda_role.arn
+}

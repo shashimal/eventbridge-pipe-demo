@@ -65,3 +65,9 @@ data "archive_file" "order_invoice_file" {
   source_file = "${path.module}/lambda-handler/order-invoice/index.mjs"
   output_path = "${path.module}/lambda-handler/order-invoice/index.zip"
 }
+
+data "archive_file" "aft_process_file" {
+  type        = "zip"
+  source_file = "${path.module}/lambda-handler/aft-process/index.mjs"
+  output_path = "${path.module}/lambda-handler/aft-process/index.zip"
+}

@@ -25,7 +25,7 @@ module "pipe_dynamodb" {
   pipe_name = "order-dynamodb-pipe"
   pipe_role_arn = aws_iam_role.pipe_dynamodb_role.arn
   pipe_source_arn =aws_dynamodb_table.order_info.stream_arn
-  pipe_enrichment_arn = module.order_process_lambda.lambda_function_arn
+  pipe_enrichment_arn = module.aft_process_lambda.lambda_function_arn
   pipe_target_arn = module.order_invoice_lambda.lambda_function_arn
   input_transform_template = local.dynamodb_enrichment_input_template
 }

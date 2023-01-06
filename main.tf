@@ -1,15 +1,16 @@
 locals {
   sqs_enrichment_input_template = "{\"item\": \"<$.body.itemName>\",\"qty\": \"<$.body.orderQty>\", \"price\" : \"<$.body.ItemPrice>\"}"
-  filters = [
+  filters                       = [
     {
-      Pattern: "{\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 10] }] } }"
+      Pattern : "{\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 10] }] } }"
     }
   ]
 
-  aft_modify_event_filters = [ { pattern : "{ \"eventName\": \"MODIFY\" }" } ]
+  #[ { pattern = "{\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 20] }] } }" } ]
+  aft_modify_event_filters = [{ pattern = "{ \"eventName\": [\"MODIFY\"] }" }]
 
 
-  dynamodb_enrichment_input_template = "{ \"custom_fields_new\":  \"<$.dynamodb.NewImage.custom_fields.S>\" , \"custom_fields_old\":  \"<$.dynamodb.OldImage.custom_fields.S>\"}"
+  dynamodb_enrichment_input_template = "{ \"eventName\": <$.eventName>,  \"newObject\":  <$.dynamodb.NewImage.custom_fields.S> , \"oldObject\":  <$.dynamodb.OldImage.custom_fields.S>}"
 }
 
 #module "pipe_sqs" {
@@ -24,13 +25,13 @@ locals {
 #}
 
 module "pipe_dynamodb" {
-  source = "./modules/pipe-dynamodb"
-  pipe_name = "order-dynamodb-pipe"
-  pipe_role_arn = aws_iam_role.pipe_dynamodb_role.arn
-  pipe_source_arn =aws_dynamodb_table.order_info.stream_arn
-  pipe_enrichment_arn = module.aft_process_lambda.lambda_function_arn
-  pipe_target_arn = module.order_invoice_lambda.lambda_function_arn
+  source                   = "./modules/pipe-dynamodb"
+  pipe_name                = "order-dynamodb-pipe"
+  pipe_role_arn            = aws_iam_role.pipe_dynamodb_role.arn
+  pipe_source_arn          = aws_dynamodb_table.order_info.stream_arn
+  pipe_enrichment_arn      = module.aft_process_lambda.lambda_function_arn
+  pipe_target_arn          = module.order_invoice_lambda.lambda_function_arn
   input_transform_template = local.dynamodb_enrichment_input_template
-  source_filters = local.aft_modify_event_filters
+  source_filters           = local.aft_modify_event_filters
 }
 

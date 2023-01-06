@@ -27,7 +27,7 @@ variable "pipe_role_arn" {
 variable "source_filters" {
   description = "Filter pattern to filter events from source"
   type = list(object({
-    Pattern = string
+    pattern = string
   }))
   default = []
 }

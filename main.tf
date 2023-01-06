@@ -8,9 +8,7 @@ locals {
 
   #[ { pattern = "{\"body\" :  { \"orderQty\": [{ \"numeric\": [\">\", 20] }] } }" } ]
   aft_modify_event_filters = [{ pattern = "{ \"eventName\": [\"MODIFY\"] }" }]
-
-
-  dynamodb_enrichment_input_template = "{ \"eventName\": <$.eventName>,  \"newObject\":  <$.dynamodb.NewImage.custom_fields.S> , \"oldObject\":  <$.dynamodb.OldImage.custom_fields.S>}"
+  dynamodb_enrichment_input_template = "{ \"eventName\": <$.eventName>,  \"newCustomFields\":  <$.dynamodb.NewImage.custom_fields.S> , \"oldCustomFields\":  <$.dynamodb.OldImage.custom_fields.S>}"
 }
 
 #module "pipe_sqs" {

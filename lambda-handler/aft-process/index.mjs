@@ -4,11 +4,11 @@ export const handler = async (event) => {
     let response = null;
 
     if (event && event.length > 0)  {
-        const newGlobalSection = JSON.parse(JSON.parse(event[0].newObject).global);
-        const oldGlobalSection = JSON.parse(JSON.parse(event[0].oldObject).global);
+        const newGlobalSection = JSON.parse(JSON.parse(event[0].newCustomFields).global);
+        const oldGlobalSection = JSON.parse(JSON.parse(event[0].oldCustomFields).global);
 
-        const newSSOSection = JSON.parse(JSON.parse(event[0].newObject).sso);
-        const oldSSOSection = JSON.parse(JSON.parse(event[0].oldObject).sso);
+        const newSSOSection = JSON.parse(JSON.parse(event[0].newCustomFields).sso);
+        const oldSSOSection = JSON.parse(JSON.parse(event[0].oldCustomFields).sso);
 
         console.log('Old SSO : %O', oldSSOSection);
         console.log('New SSO : %O', newSSOSection);

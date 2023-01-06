@@ -1,5 +1,5 @@
-resource "aws_sqs_queue" "customer_order_sqs" {
-  name = "customer-order"
+resource "aws_sqs_queue" "st_article_sqs" {
+  name = "st-articles"
 }
 
 resource "aws_dynamodb_table" "aft-request" {

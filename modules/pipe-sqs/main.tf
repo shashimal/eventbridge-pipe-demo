@@ -1,52 +1,18 @@
-resource "aws_cloudformation_stack" "this" {
-  name = "${var.pipe_name}-stack"
+resource "awscc_pipes_pipe" "pipe" {
+  name     = var.pipe_name
+  role_arn = var.pipe_role_arn
+  source   = var.pipe_source_arn
 
-  parameters = {
-    RoleArn       = var.pipe_role_arn
-    SourceArn     = var.pipe_source_arn
-    TargetArn     = var.pipe_target_arn
-    EnrichmentArn = var.pipe_enrichment_arn
-    InputTemplate = var.input_transform_template
+  source_parameters = {
+    filter_criteria = {
+      filters = var.source_filters
+    }
   }
 
-  template_body = jsonencode({
-    "Parameters" : {
-      "SourceArn" : {
-        "Type" : "String",
-      },
-      "TargetArn" : {
-        "Type" : "String",
-      },
-      "RoleArn" : {
-        "Type" : "String"
-      },
-      "InputTemplate" : {
-        "Type" : "String"
-      },
-      "EnrichmentArn" : {
-        "Type" : "String",
-      }
-    },
+  enrichment            = var.pipe_enrichment_arn
+  enrichment_parameters = {
+    input_template = var.input_transform_template
+  }
 
-    "Resources" : {
-      "CopyPipe" : {
-        "Type" : "AWS::Pipes::Pipe",
-        "Properties" : {
-          "Name" : var.pipe_name,
-          "RoleArn" : { "Ref" : "RoleArn" },
-          "Source" : { "Ref" : "SourceArn" },
-          "SourceParameters" : {
-            "FilterCriteria" : {
-              "Filters" : var.source_filters,
-            }
-          },
-          "Enrichment" : { "Ref" : "EnrichmentArn" },
-          "EnrichmentParameters" : {
-            "InputTemplate" : { "Ref" : "InputTemplate" },
-          }
-          "Target" : { "Ref" : "TargetArn" }
-        }
-      }
-    }
-  })
+  target = var.pipe_target_arn
 }

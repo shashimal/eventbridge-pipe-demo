@@ -1,7 +1,7 @@
 locals {
   aft_modify_event_filters = [{ pattern = "{ \"eventName\": [\"MODIFY\"] }" }]
   aft_enrichment_input_template = "{ \"eventName\": <$.eventName>,  \"newCustomFields\":  <$.dynamodb.NewImage.custom_fields.S> , \"oldCustomFields\":  <$.dynamodb.OldImage.custom_fields.S>}"
-  app_name = "dynamodb-pipe"
+  app_name = "aft-pipe"
 }
 
 module "dynamodb_pipe" {
